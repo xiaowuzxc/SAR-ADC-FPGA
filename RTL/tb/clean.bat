@@ -1,0 +1,2 @@
+del  tb
+del *.lxt
