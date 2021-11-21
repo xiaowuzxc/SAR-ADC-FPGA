@@ -18,11 +18,11 @@ reg start_r;//启动信号打一拍
 reg ADCI_en;//高电平转换进行中
 reg [7:0]adc_cnt;//逐次逼近计数器
 //***wire***
-
+wire start_w;//高电平一周期表示检测到上升沿
 
 
 //*************************************************
-// 启动信号，上升沿触发
+// 启动信号打一拍
 //*************************************************
 always @(posedge clk or negedge rst_n) begin
 	if(~rst_n)
@@ -30,7 +30,7 @@ always @(posedge clk or negedge rst_n) begin
 	else 
 		start_r <= start;
 end
-
+assign start_w = start==1'b1 && start_r==1'b0;
 //*************************************************
 // 转换状态机
 //*************************************************
@@ -53,7 +53,7 @@ end
 always @(*) begin
 	case (cst)
 		IDLE: 
-			if(start==1'b1 && start_r==1'b0)//等待上升沿
+			if(start_w)//等待上升沿
 				nst = ADCI;
 			else
 				nst = IDLE;
@@ -83,7 +83,7 @@ always @(posedge clk or negedge rst_n) begin
 					DACF <= 0;
 					eoc <= 1'b0;//结果输出脉冲结束
 					adc_cnt <= 0;
-					if(start==1'b1 && start_r==1'b0)
+					if(start_w)
 						ADCI_en <= 1'b1;//进入转换
 				end
 
