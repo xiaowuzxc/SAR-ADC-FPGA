@@ -9,6 +9,7 @@ bin-release/
 FPGA/
 RTL/tb/tb
 RTL/tb/tb.lxt
+RTL/work/
 # Executables
 *.swf
 *.air
