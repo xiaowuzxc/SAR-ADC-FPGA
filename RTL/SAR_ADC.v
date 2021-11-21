@@ -127,7 +127,14 @@ always @(posedge clk or negedge rst_n) begin
 					endcase
 				end
 
-			default: /* default */;
+			default: 
+				begin
+					DACF <= {1'b1,{7{1'b0}}};
+					eoc <= 1'b0;//结果输出脉冲结束
+					adc_cnt <= 0;
+					if(start_w)
+						ADCI_en <= 1'b1;//进入转换
+				end
 		endcase
 	end
 end
