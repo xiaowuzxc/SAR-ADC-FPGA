@@ -31,7 +31,11 @@ module tb(); /* this is automatically generated */
 		start <= '1;
 		#1
 		start <= '0;
-		#14
+		#4
+		start <= '1;
+		#1
+		start <= '0;
+		#10
 		start <= '1;
 		#1
 		start <= '0;

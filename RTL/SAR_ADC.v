@@ -1,3 +1,18 @@
+// -----------------------------------------------------------------------------
+// SRC 逐次逼近型ADC 数字部分控制器
+// 配合外置比较器与DAC，可以构建一个逐次逼近型ADC
+// 纯逻辑实现，可以方便地移植到任何一款FPGA
+// 转换周期数（从start上升沿被采样到可读取）= ADC位宽
+// -----------------------------------------------------------------------------
+// Copyright (c) 2014-2021 All rights reserved
+// -----------------------------------------------------------------------------
+// Author : xiaowuzxc
+// File   : SAR_ADC.v
+// Create : 2021-11-21 16:47:21
+// Revise : 2021-11-21 16:47:21
+// Editor : sublime text3, tab size (4)
+// -----------------------------------------------------------------------------
+
 module SAR_ADC #(
 	parameter ADC_WIDTH = 8 //ADC位宽，单位bit，和DAC匹配，最大不超过255
 )(
@@ -5,7 +20,7 @@ module SAR_ADC #(
 	input rst_n,// 低电平复位，异步复位同步释放
 	input cmp,// 比较器输出
 	input start,// 启动信号，上升沿触发
-	output reg [ADC_WIDTH-1:0]DACF,// DAC逐次逼近
+	output reg [ADC_WIDTH-1:0]DACF,// DAC逐次逼近反馈
 	output reg eoc,// 转换结束，高电平脉冲
 	output reg den,// 结果有效，高电平有效
 	output reg [ADC_WIDTH-1:0]Dout// 结果输出
@@ -80,7 +95,7 @@ always @(posedge clk or negedge rst_n) begin
 		case (cst)
 			IDLE: 
 				begin
-					DACF <= 0;
+					DACF <= {1'b1,{7{1'b0}}};
 					eoc <= 1'b0;//结果输出脉冲结束
 					adc_cnt <= 0;
 					if(start_w)
@@ -93,9 +108,9 @@ always @(posedge clk or negedge rst_n) begin
 					Dout <= 0;
 					adc_cnt <= adc_cnt+1;
 					case (adc_cnt)
-						0: DACF[ADC_WIDTH-1-adc_cnt] <= 1'b1;
+						//0: DACF[ADC_WIDTH-1-adc_cnt] <= 1'b1;
 
-						ADC_WIDTH:
+						ADC_WIDTH-1:
 							begin//转换最后一位，结束后输出，回归IDLE状态
 								eoc <= 1'b1;//结果输出脉冲
 								den <= 1'b1;//结果有效
@@ -104,9 +119,9 @@ always @(posedge clk or negedge rst_n) begin
 					
 						default: 
 							begin
-								DACF[ADC_WIDTH-1-adc_cnt] <= 1'b1;
-								DACF[ADC_WIDTH-adc_cnt] <= cmp;
-								if(adc_cnt==ADC_WIDTH-1)
+								DACF[ADC_WIDTH-2-adc_cnt] <= 1'b1;
+								DACF[ADC_WIDTH-1-adc_cnt] <= cmp;
+								if(adc_cnt==ADC_WIDTH-2)
 									ADCI_en <= 1'b0;//提前一周期转换结束，因为状态转移需要一个周期
 							end
 					endcase
