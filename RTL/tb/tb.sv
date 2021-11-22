@@ -3,8 +3,9 @@ module tb(); /* this is automatically generated */
 
 // SRC ADC位宽，多少位宽就需要多少周期进行转换
 parameter ADC_WIDTH = 8;
-//测试数据，位宽为ADC_WIDTH，有效数据范围是(0,2^ADC_WIDTH-1)
-parameter test_sig = 8'h55;
+//测试数据，模拟电压输入，有效数据范围(0,1)
+parameter vol_input = 0.5;
+parameter test_sig = vol_input*(2**ADC_WIDTH-1);
 //两次测试时间间隔
 parameter timeoffset = 4;
 
