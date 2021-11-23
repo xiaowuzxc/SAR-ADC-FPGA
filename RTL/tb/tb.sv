@@ -45,7 +45,7 @@ always@(*) begin
 		cmp = '1;
 end
 
-task startsw();//启动转换
+task startsw;//启动转换
 	start <= '0;
 	@(posedge clk)
 	start <= '1;
@@ -53,7 +53,7 @@ task startsw();//启动转换
 	start <= '0;
 endtask : startsw
 
-task adcrst();//复位任务
+task adcrst;//复位任务
 	rst_n <= '0;
 	start <= '0;
 	#10
