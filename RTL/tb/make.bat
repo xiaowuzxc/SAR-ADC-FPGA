@@ -1,7 +1,7 @@
-echo "¿ªÊ¼±àÒë"
+echo "å¼€å§‹ç¼–è¯‘"
 iverilog -g2005-sv -o tb -y .. tb.sv
-echo "Éú³É²¨ĞÎ"
-vvp -n tb -lxt2
-echo "ÏÔÊ¾²¨ĞÎ"
+echo "ç”Ÿæˆæ³¢å½¢"
+vvp -n tb -lxt
+echo "æ˜¾ç¤ºæ³¢å½¢"
 gtkwave tb.lxt
 pause
