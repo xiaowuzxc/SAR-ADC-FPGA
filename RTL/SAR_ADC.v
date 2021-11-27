@@ -105,7 +105,7 @@ always @(posedge clk or negedge rst_n) begin
 			ADCI:
 				begin
 					den <= 1'b0;
-					Dout <= 0;
+					Dout <= Dout;
 					adc_cnt <= adc_cnt+1;
 					case (adc_cnt)
 						//0: DACF[ADC_WIDTH-1-adc_cnt] <= 1'b1;
