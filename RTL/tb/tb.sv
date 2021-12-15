@@ -1,11 +1,22 @@
 `timescale 1ns/100ps
 module tb(); /* this is automatically generated */
 
-// SRC ADC位宽，多少位宽就需要多少周期进行转换
-parameter ADC_WIDTH = 8;
-//测试数据，模拟电压输入，有效数据范围(0,1)
-parameter vol_input = 0.5;
+`define random_test //定义则使用随机值测试
+//`define ANL_vol 0.35//测试数据，模拟电压输入，有效数据范围(0,1)
+//以上只有其中一个可以被define
+`define ADC_bits 8 // SRC ADC位宽，多少位宽就需要多少周期进行转换
+parameter ADC_WIDTH = `ADC_bits;
+`ifdef random_test
+logic [ADC_WIDTH-1:0]test_sig = $random();
+`else
+parameter vol_input = `ANL_vol;//
 parameter test_sig = vol_input*(2**ADC_WIDTH-1);
+`endif
+
+
+
+
+
 //两次测试时间间隔
 parameter timeoffset = 4;
 
