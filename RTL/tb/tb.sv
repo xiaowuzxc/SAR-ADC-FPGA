@@ -1,8 +1,8 @@
 `timescale 1ns/100ps
 module tb(); /* this is automatically generated */
 
-`define random_test //定义则使用随机值测试
-//`define ANL_vol 0.35//测试数据，模拟电压输入，有效数据范围(0,1)
+//`define random_test //定义则使用随机值测试
+`define ANL_vol 0.6//测试数据，模拟电压输入，有效数据范围(0,1)
 //以上只有其中一个可以被define
 `define ADC_bits 8 // SRC ADC位宽，多少位宽就需要多少周期进行转换
 parameter ADC_WIDTH = `ADC_bits;
