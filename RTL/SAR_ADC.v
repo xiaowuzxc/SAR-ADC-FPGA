@@ -38,7 +38,8 @@ wire start_w;//高电平一周期表示检测到上升沿
 //*************************************************
 // 启动信号打一拍
 //*************************************************
-always @(posedge clk or negedge rst_n) begin
+always @(posedge clk or negedge rst_n) 
+begin
 	if(~rst_n)
 		start_r <= 1'b0;
 	else 
@@ -57,7 +58,8 @@ parameter IDLE =2'd0;//空闲状态
 parameter ADCI =2'd1;//转换中
 
 //***状态转移***
-always @(posedge clk or negedge rst_n) begin : proc_
+always @(posedge clk or negedge rst_n) 
+begin
 	if(~rst_n)
 		cst <= IDLE;
 	else
@@ -83,7 +85,8 @@ end
 
 //***状态机输出***
 always @(posedge clk or negedge rst_n) begin
-	if(~rst_n) begin
+	if(~rst_n) 
+	begin
 		adc_cnt <= 0;
 		eoc <= 1'b0;
 		DACF <= 0;
@@ -91,8 +94,10 @@ always @(posedge clk or negedge rst_n) begin
 		den <= 1'b0;
 		ADCI_en <= 1'b0;
 	end 
-	else begin
+	else 
+	begin
 		case (cst)
+
 			IDLE: 
 				begin
 					DACF <= {1'b1,{7{1'b0}}};
@@ -108,8 +113,6 @@ always @(posedge clk or negedge rst_n) begin
 					Dout <= Dout;
 					adc_cnt <= adc_cnt+1;
 					case (adc_cnt)
-						//0: DACF[ADC_WIDTH-1-adc_cnt] <= 1'b1;
-
 						ADC_WIDTH-1:
 							begin//转换最后一位，结束后输出，回归IDLE状态
 								eoc <= 1'b1;//结果输出脉冲
