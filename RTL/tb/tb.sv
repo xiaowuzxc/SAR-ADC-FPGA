@@ -44,6 +44,15 @@ initial begin
 	#(ADC_WIDTH+timeoffset)
 	startsw();//再次转换
 	#(ADC_WIDTH+timeoffset)
+	`ifdef random_test
+	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	$display("~~~~random test，num=%d~~~~",test_sig);
+	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	`else
+	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	$display("~~~~~~~interal num=%d~~~~~~~~",test_sig);
+	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	`endif
 	$finish;
 
 end
