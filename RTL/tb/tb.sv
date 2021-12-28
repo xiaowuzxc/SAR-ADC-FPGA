@@ -1,10 +1,11 @@
 `timescale 1ns/100ps
 module tb(); /* this is automatically generated */
-
+/*----------------------两个定义二选一--------------------*/
 //`define random_test //定义则使用随机值测试
 `define ANL_vol 0.6//测试数据，模拟电压输入，有效数据范围(0,1)
-//以上只有其中一个可以被define
+/*------------------------可修改-------------------------*/
 `define ADC_bits 8 // SRC ADC位宽，多少位宽就需要多少周期进行转换
+/*------------------------可修改-------------------------*/
 parameter ADC_WIDTH = `ADC_bits;
 `ifdef random_test
 logic [ADC_WIDTH-1:0]test_sig = $random();
@@ -13,13 +14,8 @@ parameter vol_input = `ANL_vol;//
 parameter test_sig = vol_input*(2**ADC_WIDTH-1);
 `endif
 
-
-
-
-
-//两次测试时间间隔
+//两次测试周期间隔
 parameter timeoffset = 4;
-
 //测试用信号
 logic clk;
 logic rst_n;
@@ -45,16 +41,15 @@ initial begin
 	startsw();//再次转换
 	#(ADC_WIDTH+timeoffset)
 	`ifdef random_test
-	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	$display("~~~~random test，num=%d~~~~",test_sig);
-	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	$display("|---------------------------|");
+	$display("|---随机测试，目标值=%d---",test_sig);
+	$display("|---------------------------|");
 	`else
-	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	$display("~~~~~~~interal num=%d~~~~~~~~",test_sig);
-	$display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	$display("|---------------------------|");
+	$display("|-------指定目标值=%d-------",test_sig);
+	$display("|---------------------------|");
 	`endif
 	$finish;
-
 end
 
 //比较器建模，+输入为test_sig，-输入为DACF，输出cmp，产生测试激励
